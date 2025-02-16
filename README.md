@@ -29,6 +29,65 @@ verible-verilog-lint --version
 
 If the installation was successful, you should see the Verible version printed in the terminal.
 
+#### **Basic Verible Usage**
+
+**Verible Verilog Linter** (`verible-verilog-lint`)
+
+This tool checks Verilog/SystemVerilog files for style and syntax issues.
+
+**Basic usage:**
+
+```bash
+verible-verilog-lint file.sv
+```
+- Runs the linter on `file.sv` and reports any warnings or errors.
+
+**Fix Lint Errors Automatically (if possible):**
+
+```bash
+verible-verilog-lint --autofix file.sv
+```
+
+**Suppress Specific Lint Warnings:**
+
+```bash
+verible-verilog-lint --rules=-some-rule file.sv
+```
+- Replace `some-rule` with the rule you want to disable.
+- You can disable multiple rules: `--rules=-rule1,-rule2`
+
+**List Available Linting Rules:**
+
+```bash
+verible-verilog-lint --help_rules
+```
+_____________
+
+**Verible Verilog Formatter** (`verible-verilog-format`)
+
+This tool automatically formats Verilog/SystemVerilog code according to style guidelines.
+
+**Modify the File In-Place:**
+
+```bash
+verible-verilog-format --inplace file.sv
+```
+- This overwrites `file.sv` with the formatted version.
+
+
+**Format All `.sv` Files in a Directory:**
+
+```bash
+verible-verilog-format --inplace *.sv
+```
+
+**Control Formatting Style:**
+
+```bash
+verible-verilog-format --indentation_spaces=4 file.sv
+```
+- Adjusts indentation width.
+
 ______________
 
 
@@ -58,3 +117,9 @@ cat ~/.ssh/id_ed25519.pub
 Go to the project github repository and navigate to **Settings > Deploy keys**. Click to **Add deploy key**. Give it a descriptive title (e.g. "PSU ECE server Mo"). Paste the **public key** into the "Key" field and select **Allow write access**. Last, click to **Add key**.
 
 You should now have access to **push** to the project repository from the server. You may also want to update the git configuration on the server to use the correct name and email address associated with your github account.
+
+_________________
+
+### Basic `vlog` and `vsim` usage
+
+TODO
