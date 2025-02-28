@@ -11,7 +11,11 @@
 //
 ////////////////////////////////////////////////////////////////
 
-module processor();
+module processor (
+    input  clk, resetH,
+    output AddrValid, rw,
+    inout  AddrData
+);
 
 
 endmodule

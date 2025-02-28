@@ -6,7 +6,9 @@
 //
 // Description:
 // ------------
-// Top level module
+// Top level module which instantiates the interface, memory
+// controller, and the processor. Also generates the clock and
+// reset signal in order to start the system.
 //
 ////////////////////////////////////////////////////////////////
 
