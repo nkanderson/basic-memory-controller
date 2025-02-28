@@ -1,0 +1,16 @@
+//////////////////////////////////////////////////////////////
+// tc_mc_top.sv - Top level module for testing memory controller
+//
+// Author: Niklas Anderson (niklas2@pdx.edu)
+// Date: Feb 26, 2025
+//
+// Description:
+// ------------
+// Top level module
+//
+////////////////////////////////////////////////////////////////
+
+module tc_mc_top ();
+
+
+endmodule
