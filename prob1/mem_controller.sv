@@ -136,7 +136,7 @@ module mem_controller #(
       end
       DATA4: begin
         next_state = WAIT_STATE;
-        next_addr_buff = addr_buff;
+        next_addr_buff = 'z;
       end
     endcase
   end : next_state_logic
