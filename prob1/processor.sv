@@ -24,7 +24,7 @@ module processor;
 
   // Internal drive signal for AddrData
   logic [15:0] AddrData_drive;
-  assign AddrData = (AddrValid) ? AddrData_drive : 'z;
+  assign AddrData = (AddrValid || !rw) ? AddrData_drive : 'z;
 
   // Memory Controller Instance
   mem_controller #(
@@ -47,7 +47,6 @@ module processor;
     AddrValid = 1;
     @(posedge clk);
     AddrValid = 0;
-    @(posedge clk);
 
     // Drive the data over four cycles
     for (int i = 0; i < 4; i++) begin
