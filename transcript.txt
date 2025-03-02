@@ -1,0 +1,82 @@
+# //  Questa Sim-64
+# //  Version 2021.3_1 linux_x86_64 Aug 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# vsim -voptargs="+acc" work.processor 
+# Start time: 22:18:30 on Mar 01,2025
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.processor(fast)
+# Loading work.mem_controller(fast)
+# Loading work.mem(fast)
+vsim -voptargs=+acc work.processor
+# End time: 22:19:09 on Mar 01,2025, Elapsed time: 0:00:39
+# Errors: 0, Warnings: 0
+# vsim -voptargs="+acc" work.processor 
+# Start time: 22:19:09 on Mar 01,2025
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.processor(fast)
+# Loading work.mem_controller(fast)
+# Loading work.mem(fast)
+add wave -position insertpoint  \
+sim:/processor/clk \
+sim:/processor/resetH \
+sim:/processor/AddrData \
+sim:/processor/AddrValid \
+sim:/processor/rw \
+sim:/processor/AddrData_drive
+add wave -position insertpoint  \
+sim:/processor/dut/AddrData \
+sim:/processor/dut/clk \
+sim:/processor/dut/resetH \
+sim:/processor/dut/AddrValid \
+sim:/processor/dut/rw \
+sim:/processor/dut/addr_buff \
+sim:/processor/dut/next_addr_buff \
+sim:/processor/dut/is_read \
+sim:/processor/dut/is_page \
+sim:/processor/dut/drive_bus \
+sim:/processor/dut/data_write \
+sim:/processor/dut/data_read \
+sim:/processor/dut/mem_data \
+sim:/processor/dut/state \
+sim:/processor/dut/next_state
+add wave -position insertpoint  \
+sim:/processor/dut/system_mem/clk \
+sim:/processor/dut/system_mem/rdEn \
+sim:/processor/dut/system_mem/wrEn \
+sim:/processor/dut/system_mem/Addr \
+sim:/processor/dut/system_mem/Data \
+sim:/processor/dut/system_mem/M \
+sim:/processor/dut/system_mem/out
+run -all
+# Writing to valid address 0x2000...
+# Reading from valid address 0x2000...
+# PASS: Read correct data 0xabcd
+# PASS: Read correct data 0x1234
+# PASS: Read correct data 0x5678
+# PASS: Read correct data 0x9abc
+# Writing to invalid address 0x5000...
+# Reading from invalid address 0x5000...
+# PASS: Memory ignored invalid address.
+# PASS: Memory ignored invalid address.
+# PASS: Memory ignored invalid address.
+# PASS: Memory ignored invalid address.
+# ** Note: $finish    : /u/niklas2/ECE571/hw3/prob1/processor.sv(119)
+#    Time: 405 ns  Iteration: 1  Instance: /processor
+# 1
+# Break in Module processor at /u/niklas2/ECE571/hw3/prob1/processor.sv line 119
+write format wave -window .main_pane.wave.interior.cs.body.pw.wf /u/niklas2/ECE571/hw3/wave.do
+set PrefMain(saveFile) transcript.txt
+# transcript.txt

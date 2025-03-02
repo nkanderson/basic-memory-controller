@@ -1,0 +1,48 @@
+onerror {resume}
+quietly WaveActivateNextPane {} 0
+add wave -noupdate /processor/clk
+add wave -noupdate /processor/resetH
+add wave -noupdate /processor/AddrData
+add wave -noupdate /processor/AddrValid
+add wave -noupdate /processor/rw
+add wave -noupdate /processor/AddrData_drive
+add wave -noupdate /processor/dut/AddrData
+add wave -noupdate /processor/dut/clk
+add wave -noupdate /processor/dut/resetH
+add wave -noupdate /processor/dut/AddrValid
+add wave -noupdate /processor/dut/rw
+add wave -noupdate /processor/dut/addr_buff
+add wave -noupdate /processor/dut/next_addr_buff
+add wave -noupdate /processor/dut/is_read
+add wave -noupdate /processor/dut/is_page
+add wave -noupdate /processor/dut/drive_bus
+add wave -noupdate /processor/dut/data_write
+add wave -noupdate /processor/dut/data_read
+add wave -noupdate /processor/dut/mem_data
+add wave -noupdate /processor/dut/state
+add wave -noupdate /processor/dut/next_state
+add wave -noupdate /processor/dut/system_mem/clk
+add wave -noupdate /processor/dut/system_mem/rdEn
+add wave -noupdate /processor/dut/system_mem/wrEn
+add wave -noupdate /processor/dut/system_mem/Addr
+add wave -noupdate /processor/dut/system_mem/Data
+add wave -noupdate /processor/dut/system_mem/M
+add wave -noupdate /processor/dut/system_mem/out
+TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 1} {90 ns} 0}
+quietly wave cursor active 1
+configure wave -namecolwidth 221
+configure wave -valuecolwidth 85
+configure wave -justifyvalue left
+configure wave -signalnamewidth 0
+configure wave -snapdistance 10
+configure wave -datasetprefix 0
+configure wave -rowmargin 4
+configure wave -childrowmargin 2
+configure wave -gridoffset 0
+configure wave -gridperiod 1
+configure wave -griddelta 40
+configure wave -timeline 0
+configure wave -timelineunits ns
+update
+WaveRestoreZoom {0 ns} {212 ns}
