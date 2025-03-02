@@ -40,16 +40,16 @@ module mem_controller #(
   // Store the address and next address in buffers
   logic [7:0] addr_buff, next_addr_buff;
   // Should be set to 1 if this is a read, 0 if a write
-  logic is_read;
+  logic read, next_read;
   // Flag to indicate whether this page is one our memory
   // controller should respond to
   logic is_page;
   // Flag to indicate whether to drive the bus or relinquish to CPU
-  logic drive_bus;
+  // logic drive_bus;
   // TODO? Maybe only need one data_reg? Or none?
   // Store data that comes from the CPU (data_write) and data to be
   // read by the CPU (data_read)
-  logic [15:0] data_write, data_read;
+  // logic [15:0] data_write, data_read;
   // Wire for memory connections
   wire [15:0] mem_data;
 
@@ -67,18 +67,18 @@ module mem_controller #(
   // the next address after the last write is 'z. But it seems possible it will
   // be vulnerable to race conditions.
   // Tri-state buffer control for AddrData and mem_data
-  assign drive_bus = is_read && state != WAIT_STATE;
-  assign AddrData  = drive_bus ? data_read : 'z;
+  // assign drive_bus = is_read && state != WAIT_STATE;
+  // assign AddrData  = drive_bus ? data_read : 'z;
   // mem_data (the mem module's Data inout) can be written to or allow the
   // mem module to drive it
-  assign mem_data  = (!is_read && state != WAIT_STATE) ? data_write : 'z;
+  // assign mem_data  = (!is_read && state != WAIT_STATE) ? data_write : 'z;
   // If we're reading, allow the mem module to drive
-  assign data_read = is_read ? mem_data : 'z;
+  // assign data_read = is_read ? mem_data : 'z;
   // If we're not reading, allow the CPU to drive data_write
-  assign data_write = !is_read ? AddrData : 'z;
+  // assign data_write = !is_read ? AddrData : 'z;
   // TODO: Can maybe simplify to the following:
-  // assign AddrData = (is_read && state != WAIT_STATE) ? mem_data : 'z;
-  // assign mem_data = (!is_read && state != WAIT_STATE) ? AddrData : 'z;
+  assign AddrData = (read && state != WAIT_STATE) ? mem_data : 'z;
+  assign mem_data = (!read && state != WAIT_STATE) ? AddrData : 'z;
   // then remove drive_bus, data_read, and data_write
 
   // Page mask
@@ -113,11 +113,14 @@ module mem_controller #(
     else begin
       state <= next_state;
       addr_buff <= next_addr_buff;
+      read <= next_read;
     end
   end : update_state
 
   // Next state logic
   always_comb begin : next_state_logic
+    // Assume the same read status except for leaving the wait state
+    next_read = read;
     unique case (state)
       WAIT_STATE: begin
         if (AddrValid && is_page) begin
@@ -126,7 +129,7 @@ module mem_controller #(
           // TODO? Is it possible for a write to occur before the correct address
           // has been written to addr_buff? Like if the prior addr is maintained
           // I think this might need to be registered
-          is_read = rw;
+          next_read = rw;
         end else begin
           next_state = WAIT_STATE;
         end
