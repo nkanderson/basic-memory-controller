@@ -46,6 +46,7 @@ module mem_controller #(
   logic is_page;
   // Flag to indicate whether to drive the bus or relinquish to CPU
   logic drive_bus;
+  // TODO? Maybe only need one data_reg? Or none?
   // Store data that comes from the CPU (data_write) and data to be
   // read by the CPU (data_read)
   logic [15:0] data_write, data_read;
@@ -62,8 +63,9 @@ module mem_controller #(
   } state_t;
   state_t state, next_state;
 
-  // FIXME: Writing mostly works, except the last chunk of data is written
-  // correctly briefly, then overwritten with 'z
+  // FIXME: This appears to work, along with the next state logic that ensures
+  // the next address after the last write is 'z. But it seems possible it will
+  // be vulnerable to race conditions.
   // Tri-state buffer control for AddrData and mem_data
   assign drive_bus = is_read && state != WAIT_STATE;
   assign AddrData  = drive_bus ? data_read : 'z;
@@ -74,6 +76,10 @@ module mem_controller #(
   assign data_read = is_read ? mem_data : 'z;
   // If we're not reading, allow the CPU to drive data_write
   assign data_write = !is_read ? AddrData : 'z;
+  // TODO: Can maybe simplify to the following:
+  // assign AddrData = (is_read && state != WAIT_STATE) ? mem_data : 'z;
+  // assign mem_data = (!is_read && state != WAIT_STATE) ? AddrData : 'z;
+  // then remove drive_bus, data_read, and data_write
 
   // Page mask
   localparam logic [15:0] PAGE_MASK = 16'hF000;
@@ -117,6 +123,9 @@ module mem_controller #(
         if (AddrValid && is_page) begin
           next_state = DATA1;
           next_addr_buff = AddrData[7:0];
+          // TODO? Is it possible for a write to occur before the correct address
+          // has been written to addr_buff? Like if the prior addr is maintained
+          // I think this might need to be registered
           is_read = rw;
         end else begin
           next_state = WAIT_STATE;
