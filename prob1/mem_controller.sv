@@ -52,11 +52,6 @@ module mem_controller #(
   // Wire for memory connections
   wire [15:0] mem_data;
 
-  // Tri-state buffer control for AddrData and mem_data
-  assign drive_bus = is_read && state != WAIT_STATE;
-  assign AddrData = drive_bus ? data_read : 'z;
-  assign mem_data = (!is_read && state != WAIT_STATE) ? data_write : 'z;
-
   // States for read / write sequence
   typedef enum logic [2:0] {
     WAIT_STATE,
@@ -66,6 +61,11 @@ module mem_controller #(
     DATA4
   } state_t;
   state_t state, next_state;
+
+  // Tri-state buffer control for AddrData and mem_data
+  assign drive_bus = is_read && state != WAIT_STATE;
+  assign AddrData  = drive_bus ? data_read : 'z;
+  assign mem_data  = (!is_read && state != WAIT_STATE) ? data_write : 'z;
 
   // Page mask
   localparam logic [15:0] PAGE_MASK = 16'hF000;
