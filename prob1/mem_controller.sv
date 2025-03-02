@@ -62,14 +62,22 @@ module mem_controller #(
   } state_t;
   state_t state, next_state;
 
+  // FIXME: Writing mostly works, except the last chunk of data is written
+  // correctly briefly, then overwritten with 'z
   // Tri-state buffer control for AddrData and mem_data
   assign drive_bus = is_read && state != WAIT_STATE;
   assign AddrData  = drive_bus ? data_read : 'z;
+  // mem_data (the mem module's Data inout) can be written to or allow the
+  // mem module to drive it
   assign mem_data  = (!is_read && state != WAIT_STATE) ? data_write : 'z;
+  // If we're reading, allow the mem module to drive
+  assign data_read = is_read ? mem_data : 'z;
+  // If we're not reading, allow the CPU to drive data_write
+  assign data_write = !is_read ? AddrData : 'z;
 
   // Page mask
   localparam logic [15:0] PAGE_MASK = 16'hF000;
-  assign is_page = (PAGE_MASK & AddrData) == ({12'b0, PAGE} << 12);
+  assign is_page = AddrValid && ((PAGE_MASK & AddrData) == ({12'b0, PAGE} << 12));
 
   // Instantiate system memory
   mem system_mem (
@@ -80,14 +88,16 @@ module mem_controller #(
       .Data(mem_data)
   );
 
+  // FIXME: This lags behind one cycle, but is maybe less prone
+  // to the data races that could arise with continuous assign
   // Capture data from the memory for reads
   // otherwise write memory data to AddrData
-  always_ff @(posedge clk) begin : read_data
-    if (state != WAIT_STATE) begin
-      if (is_read) data_read <= mem_data;
-      else data_write <= AddrData;
-    end
-  end : read_data
+  // always_ff @(posedge clk) begin : read_data
+  //   if (state != WAIT_STATE) begin
+  //     if (is_read) data_read <= mem_data;
+  //     else data_write <= AddrData;
+  //   end
+  // end : read_data
 
   // State update transition
   always_ff @(posedge clk or posedge resetH) begin : update_state
