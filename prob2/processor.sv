@@ -39,7 +39,7 @@ module processor(mainbus_if.primary bus);
   task read(input logic [15:0] base_addr, output logic [15:0] data[4]);
     bus.rw = 1;
     AddrData_drive = base_addr;
-    AddrValid = 1;
+    bus.AddrValid = 1;
     @(posedge bus.clk);
     bus.AddrValid = 0;
     // Release bus after address phase
