@@ -103,12 +103,32 @@ module processor;
     end
     repeat (5) @(posedge clk);
 
-    // 3. Attempt to write to an invalid address (not in PAGE 0x2)
+    // 3. Write to another valid address within PAGE 0x2
+    //    overwriting some of the existing data
+    $display("Writing to valid address 0x2001...");
+    write(16'h2001, write_data);
+    repeat (5) @(posedge clk);
+
+    // 4. Then immediately perform another write
+    $display("Writing to valid address 0x2005...");
+    write(16'h2005, write_data);
+    repeat (5) @(posedge clk);
+
+    // 5. Read back from valid address
+    $display("Reading from valid address 0x2001...");
+    read(16'h2001, read_data);
+    for (int i = 0; i < 4; i++) begin
+      if (read_data[i] == write_data[i]) $display("PASS: Read correct data 0x%h", read_data[i]);
+      else $display("FAIL: Read incorrect data 0x%h", read_data[i]);
+    end
+    repeat (5) @(posedge clk);
+
+    // 6. Attempt to write to an invalid address (not in PAGE 0x2)
     $display("Writing to invalid address 0x5000...");
     write(16'h5000, write_data);
     repeat (5) @(posedge clk);
 
-    // 4. Attempt to read from invalid address
+    // 7. Attempt to read from invalid address
     $display("Reading from invalid address 0x5000...");
     read(16'h5000, read_data);
     for (int i = 0; i < 4; i++) begin

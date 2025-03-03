@@ -1,0 +1,60 @@
+# Compile of mem_controller.sv was successful.
+# Compile of mem.sv was successful.
+# Compile of processor.sv was successful with warnings.
+# 3 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.processor
+# End time: 16:49:30 on Mar 02,2025, Elapsed time: 0:03:13
+# Errors: 0, Warnings: 2
+# vsim -voptargs="+acc" work.processor 
+# Start time: 16:49:30 on Mar 02,2025
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.processor(fast)
+# Loading work.mem_controller(fast)
+# Loading work.mem(fast)
+add wave -position insertpoint  \
+sim:/processor/clk \
+sim:/processor/resetH \
+sim:/processor/AddrData \
+sim:/processor/AddrValid \
+sim:/processor/rw \
+sim:/processor/AddrData_drive
+add wave -position insertpoint  \
+sim:/processor/dut/AddrData \
+sim:/processor/dut/clk \
+sim:/processor/dut/resetH \
+sim:/processor/dut/AddrValid \
+sim:/processor/dut/rw \
+sim:/processor/dut/addr_buff \
+sim:/processor/dut/next_addr_buff \
+sim:/processor/dut/read \
+sim:/processor/dut/next_read \
+sim:/processor/dut/is_page \
+sim:/processor/dut/mem_data \
+sim:/processor/dut/state \
+sim:/processor/dut/next_state
+add wave -position insertpoint sim:/processor/dut/system_mem/*
+run -all
+# Writing to valid address 0x2000...
+# Reading from valid address 0x2000...
+# PASS: Read correct data 0xabcd
+# PASS: Read correct data 0x1234
+# PASS: Read correct data 0x5678
+# PASS: Read correct data 0x9abc
+# Writing to valid address 0x2001...
+# Writing to valid address 0x2005...
+# Reading from valid address 0x2001...
+# PASS: Read correct data 0xabcd
+# PASS: Read correct data 0x1234
+# PASS: Read correct data 0x5678
+# PASS: Read correct data 0x9abc
+# Writing to invalid address 0x5000...
+# Reading from invalid address 0x5000...
+# PASS: Memory ignored invalid address.
+# PASS: Memory ignored invalid address.
+# PASS: Memory ignored invalid address.
+# PASS: Memory ignored invalid address.
+# ** Note: $finish    : C:/Users/Kirsten/OneDrive/Documents/ECE571/basic-memory-controller/prob1/processor.sv(139)
+#    Time: 715 ns  Iteration: 1  Instance: /processor
+# 1
+# Break in Module processor at C:/Users/Kirsten/OneDrive/Documents/ECE571/basic-memory-controller/prob1/processor.sv line 139
